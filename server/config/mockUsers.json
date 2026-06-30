@@ -1,0 +1,90 @@
+[
+  {
+    "_id": "mock-user-demo",
+    "name": "Demo User Updated",
+    "email": "demo@hirewave.com",
+    "password": "$2a$12$z2qb2wqkHxGge30O3RtsZeBNdEUmYHaXYnILMnDRpsz.LLsIBNLQa",
+    "googleId": null,
+    "avatar": null,
+    "bookmarks": [
+      "mock-job-6w0xmmseq",
+      "mock-job-tvb1sziwy",
+      "mock-job-sro20aoks"
+    ],
+    "profile": {
+      "skills": [
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB"
+      ],
+      "experience": "2 years",
+      "location": "San Francisco, CA",
+      "bio": "Software Craftsman"
+    },
+    "role": "user",
+    "isVerified": true,
+    "lastLogin": "2026-06-30T05:45:13.798Z",
+    "createdAt": "2026-06-29T19:01:39.087Z",
+    "updatedAt": "2026-06-30T05:45:13.799Z"
+  },
+  {
+    "_id": "mock-user-njyq4pvkg",
+    "name": "Test User",
+    "email": "test@hirewave.com",
+    "password": "$2a$12$57jvBh4XgLm0oQer54f3OOZwwXGf7WmmvtewBcBjXUh8vN1ym6eMG",
+    "avatar": null,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "role": "user",
+    "isVerified": false,
+    "createdAt": "2026-06-30T04:46:51.366Z",
+    "updatedAt": "2026-06-30T04:46:51.366Z"
+  },
+  {
+    "_id": "mock-user-ccyc6ztza",
+    "name": "Google Test User",
+    "email": "google.test@hirewave.com",
+    "googleId": "mock-google-id-123",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
+    "isVerified": false,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "role": "user",
+    "createdAt": "2026-06-30T05:01:44.595Z",
+    "updatedAt": "2026-06-30T05:01:44.595Z"
+  },
+  {
+    "_id": "mock-user-admin",
+    "name": "Admin User",
+    "email": "admin@hirewave.com",
+    "password": "$2a$12$rupO4HVTid2AgTDRkBXylefNxPV0iafK/p869fiYTO8RR/SX4gfA.",
+    "googleId": null,
+    "avatar": null,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "role": "admin",
+    "isVerified": true,
+    "lastLogin": "2026-06-30T13:24:13.004Z",
+    "createdAt": "2026-06-30T05:41:31.283Z",
+    "updatedAt": "2026-06-30T13:24:13.006Z"
+  }
+]

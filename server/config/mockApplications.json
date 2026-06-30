@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "mock-app-mqz7p54gn",
+    "status": "wishlist",
+    "appliedDate": "2026-06-30T05:14:47.210Z",
+    "notes": "Applied via CEO referral",
+    "salary": "120K USD",
+    "userId": "mock-user-demo",
+    "jobId": null,
+    "title": "Staff Fullstack Engineer",
+    "company": "Vercel",
+    "location": "Remote",
+    "createdAt": "2026-06-30T05:14:47.210Z",
+    "updatedAt": "2026-06-30T05:18:30.129Z"
+  }
+]

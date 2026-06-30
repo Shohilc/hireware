@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 8%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 230 90% 64%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62% 55%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 230 90% 64%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: hsl(217 32% 17%);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply bg-page text-zinc-900 dark:bg-page-dark dark:text-zinc-100 transition-colors duration-500 ease-smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0F1E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E2A45;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2D3B5E;
+  }
+}
+
+@layer components {
+  /* Selection */
+  ::selection {
+    background-color: rgba(79, 110, 247, 0.3);
+    color: white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-white/10 backdrop-blur-2xl border border-white/15;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-500 via-accent-purple to-accent-pink bg-clip-text text-transparent;
+  }
+
+  .gradient-text-blue {
+    @apply bg-gradient-to-r from-brand-400 to-accent-cyan bg-clip-text text-transparent;
+  }
+
+  .card-glow {
+    box-shadow: 0 0 0 1px rgba(79, 110, 247, 0.1), 0 4px 24px rgba(79, 110, 247, 0.05);
+  }
+
+  .card-glow:hover {
+    box-shadow: 0 0 0 1px rgba(79, 110, 247, 0.3), 0 4px 32px rgba(79, 110, 247, 0.15);
+  }
+
+  .glow-brand {
+    box-shadow: 0 0 20px rgba(79, 110, 247, 0.3), 0 0 60px rgba(79, 110, 247, 0.1);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 60px rgba(168, 85, 247, 0.1);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Animated gradient border */
+  .border-gradient {
+    position: relative;
+    border: none;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #4F6EF7, #A855F7, #EC4899);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+html {
+  transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.job-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    0 16px 32px rgba(0, 0, 0, 0.06),
+    0 32px 64px rgba(0, 0, 0, 0.04);
+}
+.job-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.06),
+    0 24px 48px rgba(0, 0, 0, 0.10),
+    0 48px 96px rgba(0, 0, 0, 0.08);
+}
+.dark .job-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    0 16px 32px rgba(0, 0, 0, 0.4),
+    0 32px 64px rgba(0, 0, 0, 0.3);
+}
+.dark .job-card:hover {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.5),
+    0 24px 48px rgba(0, 0, 0, 0.6),
+    0 48px 96px rgba(0, 0, 0, 0.5);
+}
+
