@@ -31,12 +31,12 @@ function DialogContent({ children, className, ...props }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => onOpenChange?.(false)} />
       <div className={cn(
-        "relative z-50 w-full max-w-lg rounded-2xl border border-surface-border bg-surface-card p-6 shadow-2xl animate-scale-in mx-4",
+        "relative z-50 w-full max-w-lg rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-2xl animate-scale-in mx-4 text-zinc-900 dark:text-zinc-100",
         className
       )} {...props}>
         <button
           onClick={() => onOpenChange?.(false)}
-          className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity text-muted-foreground hover:text-white"
+          className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity text-muted-foreground hover:text-zinc-900 dark:hover:text-white"
         >
           <X className="h-4 w-4" />
         </button>
@@ -52,7 +52,7 @@ function DialogHeader({ className, ...props }) {
 }
 
 function DialogTitle({ className, ...props }) {
-  return <h2 className={cn("text-lg font-semibold leading-none tracking-tight text-white", className)} {...props} />;
+  return <h2 className={cn("text-lg font-semibold leading-none tracking-tight text-zinc-900 dark:text-white", className)} {...props} />;
 }
 
 function DialogDescription({ className, ...props }) {

@@ -83,8 +83,27 @@
     },
     "role": "admin",
     "isVerified": true,
-    "lastLogin": "2026-06-30T13:24:13.004Z",
+    "lastLogin": "2026-06-30T14:19:44.163Z",
     "createdAt": "2026-06-30T05:41:31.283Z",
-    "updatedAt": "2026-06-30T13:24:13.006Z"
+    "updatedAt": "2026-06-30T14:19:44.163Z"
+  },
+  {
+    "_id": "mock-user-l55cdoswx",
+    "name": "Jane Doe",
+    "email": "jane@doe.com",
+    "password": "$2a$12$XY0hIFIvc8saiCt7n0ln8e4GNB1EO6zDlV7C.jPaLZQobKMVsucw6",
+    "avatar": null,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "role": "user",
+    "isVerified": false,
+    "createdAt": "2026-06-30T14:14:19.386Z",
+    "updatedAt": "2026-06-30T14:14:19.386Z"
   }
 ]

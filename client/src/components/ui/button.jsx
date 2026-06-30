@@ -9,9 +9,9 @@ const buttonVariants = cva(
       variant: {
         default: "bg-brand-500 text-white hover:bg-brand-600 shadow-lg shadow-brand-500/25",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-surface-border bg-transparent hover:bg-white/5 hover:text-white",
-        secondary: "bg-surface-card text-white hover:bg-surface-hover border border-surface-border",
-        ghost: "hover:bg-white/5 hover:text-white",
+        outline: "border border-zinc-200 dark:border-zinc-800 bg-transparent text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
+        secondary: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700",
+        ghost: "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-white",
         link: "text-brand-400 underline-offset-4 hover:underline",
         glow: "bg-brand-500 text-white hover:bg-brand-600 shadow-lg shadow-brand-500/40 hover:shadow-brand-500/60",
       },

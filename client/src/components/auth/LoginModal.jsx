@@ -37,7 +37,7 @@ export default function LoginModal({ open, onOpenChange, onSwitchToSignup }) {
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           {/* Email */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground">Email</label>
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -53,7 +53,7 @@ export default function LoginModal({ open, onOpenChange, onSwitchToSignup }) {
 
           {/* Password */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground">Password</label>
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -101,10 +101,10 @@ export default function LoginModal({ open, onOpenChange, onSwitchToSignup }) {
         {/* Divider */}
         <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-surface-border" />
+            <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="px-2 bg-surface-card text-muted-foreground">or</span>
+            <span className="px-2 bg-white dark:bg-zinc-900 text-muted-foreground">or</span>
           </div>
         </div>
 

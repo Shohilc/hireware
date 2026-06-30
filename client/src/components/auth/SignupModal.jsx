@@ -43,7 +43,7 @@ export default function SignupModal({ open, onOpenChange, onSwitchToLogin }) {
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           {/* Name */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground">Full Name</label>
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Full Name</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -59,7 +59,7 @@ export default function SignupModal({ open, onOpenChange, onSwitchToLogin }) {
 
           {/* Email */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground">Email</label>
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -75,7 +75,7 @@ export default function SignupModal({ open, onOpenChange, onSwitchToLogin }) {
 
           {/* Password */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground">Password</label>
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
