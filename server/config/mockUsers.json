@@ -1,34 +1,5 @@
 [
   {
-    "_id": "mock-user-demo",
-    "name": "Demo User Updated",
-    "email": "demo@hirewave.com",
-    "password": "$2a$12$z2qb2wqkHxGge30O3RtsZeBNdEUmYHaXYnILMnDRpsz.LLsIBNLQa",
-    "googleId": null,
-    "avatar": null,
-    "bookmarks": [
-      "mock-job-6w0xmmseq",
-      "mock-job-tvb1sziwy",
-      "mock-job-sro20aoks"
-    ],
-    "profile": {
-      "skills": [
-        "React",
-        "Node.js",
-        "Express",
-        "MongoDB"
-      ],
-      "experience": "2 years",
-      "location": "San Francisco, CA",
-      "bio": "Software Craftsman"
-    },
-    "role": "user",
-    "isVerified": true,
-    "lastLogin": "2026-06-30T05:45:13.798Z",
-    "createdAt": "2026-06-29T19:01:39.087Z",
-    "updatedAt": "2026-06-30T05:45:13.799Z"
-  },
-  {
     "_id": "mock-user-njyq4pvkg",
     "name": "Test User",
     "email": "test@hirewave.com",
@@ -67,27 +38,6 @@
     "updatedAt": "2026-06-30T05:01:44.595Z"
   },
   {
-    "_id": "mock-user-admin",
-    "name": "Admin User",
-    "email": "admin@hirewave.com",
-    "password": "$2a$12$rupO4HVTid2AgTDRkBXylefNxPV0iafK/p869fiYTO8RR/SX4gfA.",
-    "googleId": null,
-    "avatar": null,
-    "bookmarks": [],
-    "profile": {
-      "skills": [],
-      "experience": "",
-      "location": "",
-      "resume": "",
-      "bio": ""
-    },
-    "role": "admin",
-    "isVerified": true,
-    "lastLogin": "2026-06-30T14:19:44.163Z",
-    "createdAt": "2026-06-30T05:41:31.283Z",
-    "updatedAt": "2026-06-30T14:19:44.163Z"
-  },
-  {
     "_id": "mock-user-l55cdoswx",
     "name": "Jane Doe",
     "email": "jane@doe.com",
@@ -105,5 +55,64 @@
     "isVerified": false,
     "createdAt": "2026-06-30T14:14:19.386Z",
     "updatedAt": "2026-06-30T14:14:19.386Z"
+  },
+  {
+    "_id": "mock-user-r320dpxyt",
+    "name": "shohil",
+    "email": "shohilcg@gmail.com",
+    "password": "$2a$12$3FpDacICWVEaw5ESteI/Hu1hSnol/9A7sVVA0Jl9z.ea2tz6I9DAe",
+    "googleId": null,
+    "avatar": null,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "role": "user",
+    "isVerified": false,
+    "lastLogin": "2026-06-30T14:30:19.959Z",
+    "createdAt": "2026-06-30T14:30:07.210Z",
+    "updatedAt": "2026-06-30T14:30:19.962Z"
+  },
+  {
+    "_id": "mock-user-uyl3az8g4",
+    "name": "Demo User",
+    "email": "demo@hirewave.com",
+    "password": "$2a$12$If4YEe.0ocq6NTS/7GXvzuxBhd/SyJBSVyBrRkPvTqYa1ILANaayW",
+    "role": "user",
+    "isVerified": true,
+    "avatar": null,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "createdAt": "2026-06-30T14:31:58.996Z",
+    "updatedAt": "2026-06-30T14:31:58.996Z"
+  },
+  {
+    "_id": "mock-user-a5w8xducv",
+    "name": "Admin User",
+    "email": "admin@hirewave.com",
+    "password": "$2a$12$1xcV0e6Hc872QDWMO79S5ugLgfOWmKj/6d2TScWtA8Ua5u.Jqp4R6",
+    "role": "admin",
+    "isVerified": true,
+    "avatar": null,
+    "bookmarks": [],
+    "profile": {
+      "skills": [],
+      "experience": "",
+      "location": "",
+      "resume": "",
+      "bio": ""
+    },
+    "createdAt": "2026-06-30T14:31:59.263Z",
+    "updatedAt": "2026-06-30T14:31:59.263Z"
   }
 ]

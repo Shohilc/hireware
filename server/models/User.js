@@ -141,27 +141,35 @@ const MockUserModel = {
   },
   create: async (data) => {
     const users = readUsers();
-    const newId = 'mock-user-' + Math.random().toString(36).substr(2, 9);
-    const userObj = {
-      _id: newId,
-      ...data,
-      email: data.email.toLowerCase(),
-      avatar: data.avatar || null,
-      bookmarks: [],
-      profile: { skills: [], experience: '', location: '', resume: '', bio: '' },
-      role: 'user',
-      isVerified: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    const isArray = Array.isArray(data);
+    const items = isArray ? data : [data];
+    const createdItems = [];
 
-    if (userObj.password) {
-      userObj.password = await mockHashPassword(userObj.password);
+    for (const item of items) {
+      const newId = item._id || 'mock-user-' + Math.random().toString(36).substr(2, 9);
+      const userObj = {
+        _id: newId,
+        ...item,
+        email: item.email.toLowerCase(),
+        avatar: item.avatar || null,
+        bookmarks: item.bookmarks || [],
+        profile: item.profile || { skills: [], experience: '', location: '', resume: '', bio: '' },
+        role: item.role || 'user',
+        isVerified: item.isVerified || false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      if (userObj.password) {
+        userObj.password = await mockHashPassword(userObj.password);
+      }
+
+      users.push(userObj);
+      createdItems.push(new MockUserInstance(userObj));
     }
 
-    users.push(userObj);
     writeUsers(users);
-    return new MockUserInstance(userObj);
+    return isArray ? createdItems : createdItems[0];
   },
   findByIdAndUpdate: async (id, updates = {}) => {
     const users = readUsers();
@@ -179,6 +187,16 @@ const MockUserModel = {
     }
     return null;
   },
+  deleteMany: async (query = {}) => {
+    const users = readUsers();
+    let remainingUsers = users;
+    if (query.email && query.email.$in) {
+      const emailList = query.email.$in.map(e => e.toLowerCase());
+      remainingUsers = users.filter(u => u && u.email && !emailList.includes(u.email.toLowerCase()));
+    }
+    writeUsers(remainingUsers);
+    return { deletedCount: users.length - remainingUsers.length };
+  },
 };
 
 const UserDelegator = {
@@ -187,6 +205,7 @@ const UserDelegator = {
   create: (...args) => (process.env.USE_MOCK_DB === 'true' ? MockUserModel : RealUserModel).create(...args),
   findByIdAndUpdate: (...args) => (process.env.USE_MOCK_DB === 'true' ? MockUserModel : RealUserModel).findByIdAndUpdate(...args),
   find: (...args) => (process.env.USE_MOCK_DB === 'true' ? MockUserModel : RealUserModel).find(...args),
+  deleteMany: (...args) => (process.env.USE_MOCK_DB === 'true' ? MockUserModel : RealUserModel).deleteMany(...args),
 };
 
 export default UserDelegator;
