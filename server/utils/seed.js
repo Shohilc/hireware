@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Job from '../models/Job.js';
+import User from '../models/User.js';
 import connectDB from '../config/db.js';
 import { normalizeJob } from './normalizeJob.js';
 
@@ -116,13 +117,35 @@ async function seedDatabase() {
 
     console.log('🧹 Clearing existing jobs...');
     await Job.deleteMany({});
-    console.log('✅ Cleaned database');
+    console.log('✅ Cleaned database jobs');
+
+    console.log('🧹 Clearing existing seed users...');
+    await User.deleteMany({ email: { $in: ['admin@hirewave.com', 'demo@hirewave.com'] } });
+    console.log('✅ Cleaned database users');
 
     console.log('🌱 Normalizing and seeding jobs...');
     const normalizedJobs = mockRawJobs.map(normalizeJob);
-    
     await Job.insertMany(normalizedJobs);
     console.log(`✅ Successfully seeded ${normalizedJobs.length} mock jobs!`);
+
+    console.log('🌱 Seeding demo and admin users...');
+    await User.create([
+      {
+        name: 'Demo User',
+        email: 'demo@hirewave.com',
+        password: 'demo123',
+        role: 'user',
+        isVerified: true
+      },
+      {
+        name: 'Admin User',
+        email: 'admin@hirewave.com',
+        password: 'admin123',
+        role: 'admin',
+        isVerified: true
+      }
+    ]);
+    console.log('✅ Demo and Admin users successfully seeded!');
 
     await mongoose.connection.close();
     console.log('🔌 Database connection closed');
