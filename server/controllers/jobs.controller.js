@@ -58,24 +58,37 @@ export const getJobs = async (req, res, next) => {
 
 export const searchJobs = async (req, res, next) => {
   try {
-    const { q, page = 1, limit = 20 } = req.query;
+    const {
+      q,
+      page = 1,
+      limit = 20,
+      location,
+      type,
+      source,
+      remote,
+      experience,
+    } = req.query;
 
     if (!q || q.trim().length === 0) {
       return res.json({ jobs: [], total: 0, pages: 0 });
     }
 
+    const filter = { $text: { $search: q }, isActive: true };
+    if (location) filter.location = new RegExp(location, 'i');
+    if (type) filter.type = type;
+    if (source) filter.source = source;
+    if (remote === 'true') filter.remote = true;
+    if (experience) filter.experience = new RegExp(experience, 'i');
+
     const skip = (Number(page) - 1) * Number(limit);
 
     const [jobs, total] = await Promise.all([
-      Job.find(
-        { $text: { $search: q }, isActive: true },
-        { score: { $meta: 'textScore' } }
-      )
+      Job.find(filter, { score: { $meta: 'textScore' } })
         .sort({ score: { $meta: 'textScore' } })
         .skip(skip)
         .limit(Number(limit))
         .lean(),
-      Job.countDocuments({ $text: { $search: q }, isActive: true }),
+      Job.countDocuments(filter),
     ]);
 
     res.json({

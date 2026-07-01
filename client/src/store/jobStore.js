@@ -38,10 +38,20 @@ export const useJobStore = create((set, get) => ({
     }
   },
 
-  searchJobs: async (query, page = 1) => {
+  searchJobs: async (query, filters = {}) => {
     set({ loading: true, error: null });
     try {
-      const { data } = await api.get(`/jobs/search?q=${encodeURIComponent(query)}&page=${page}`);
+      const params = new URLSearchParams();
+      params.set('q', query);
+      params.set('page', filters.page || 1);
+      params.set('limit', filters.limit || 20);
+      if (filters.location) params.set('location', filters.location);
+      if (filters.type) params.set('type', filters.type);
+      if (filters.source) params.set('source', filters.source);
+      if (filters.remote) params.set('remote', 'true');
+      if (filters.experience) params.set('experience', filters.experience);
+
+      const { data } = await api.get(`/jobs/search?${params}`);
       set({
         jobs: data.jobs,
         total: data.total,

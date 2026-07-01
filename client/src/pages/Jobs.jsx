@@ -33,21 +33,15 @@ export default function Jobs() {
     };
 
     if (filters.search) {
-      searchJobs(filters.search);
+      searchJobs(filters.search, activeFilters);
     } else {
       fetchJobs(activeFilters);
     }
-  }, [filters.location, filters.type, filters.source, filters.remote, filters.sort, filters.experience]);
+  }, [filters.location, filters.type, filters.source, filters.remote, filters.sort, filters.experience, filters.search]);
 
   const handleSearch = (query, location) => {
     if (location) filters.setFilter('location', location);
-    if (query) {
-      filters.setFilter('search', query);
-      searchJobs(query);
-    } else {
-      filters.setFilter('search', '');
-      fetchJobs();
-    }
+    filters.setFilter('search', query || '');
   };
 
   const handleJobClick = (job) => {
