@@ -102,20 +102,43 @@ const MockJobModel = {
     if (filter.$text) {
       const searchVal = filter.$text.$search.toLowerCase();
       const searchWords = searchVal.split(/\s+/).filter(Boolean);
+      
+      const genericWords = [
+        'developer', 'engineer', 'software', 'development', 'lead', 
+        'senior', 'junior', 'systems', 'system', 'analyst', 'manager', 
+        'intern', 'role', 'work', 'job', 'jobs'
+      ];
+      const specificWords = searchWords.filter(w => !genericWords.includes(w));
 
-      // Filter first: must match exact phrase or any of the search words
+      // Filter first: must match exact phrase or any of the specific technical keywords
       result = result.filter((j) => {
-        return (
-          j.title.toLowerCase().includes(searchVal) ||
-          j.company.toLowerCase().includes(searchVal) ||
-          j.description.toLowerCase().includes(searchVal) ||
-          j.tags.some((t) => t.toLowerCase().includes(searchVal)) ||
-          searchWords.some(w =>
-            j.title.toLowerCase().includes(w) ||
-            j.company.toLowerCase().includes(w) ||
-            j.description.toLowerCase().includes(w) ||
-            j.tags.some((t) => t.toLowerCase().includes(w))
-          )
+        const titleL = j.title.toLowerCase();
+        const descL = j.description.toLowerCase();
+        const companyL = j.company.toLowerCase();
+        const tagsL = j.tags.map(t => t.toLowerCase());
+
+        // Check if it matches the exact phrase
+        if (titleL.includes(searchVal) || descL.includes(searchVal) || companyL.includes(searchVal) || tagsL.some(t => t.includes(searchVal))) {
+          return true;
+        }
+
+        // If we have specific technical keywords in the search query (like "react"),
+        // the job MUST match at least one of these specific keywords to be included.
+        if (specificWords.length > 0) {
+          return specificWords.some(w =>
+            titleL.includes(w) ||
+            descL.includes(w) ||
+            companyL.includes(w) ||
+            tagsL.some(t => t.includes(w))
+          );
+        }
+
+        // Otherwise fallback to matching any search word
+        return searchWords.some(w =>
+          titleL.includes(w) ||
+          descL.includes(w) ||
+          companyL.includes(w) ||
+          tagsL.some(t => t.includes(w))
         );
       });
 
