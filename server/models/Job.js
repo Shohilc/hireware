@@ -101,13 +101,41 @@ const MockJobModel = {
 
     if (filter.$text) {
       const searchVal = filter.$text.$search.toLowerCase();
-      result = result.filter(
-        (j) =>
+      const searchWords = searchVal.split(/\s+/).filter(Boolean);
+
+      // Filter first: must match exact phrase or any of the search words
+      result = result.filter((j) => {
+        return (
           j.title.toLowerCase().includes(searchVal) ||
           j.company.toLowerCase().includes(searchVal) ||
           j.description.toLowerCase().includes(searchVal) ||
-          j.tags.some((t) => t.toLowerCase().includes(searchVal))
-      );
+          j.tags.some((t) => t.toLowerCase().includes(searchVal)) ||
+          searchWords.some(w =>
+            j.title.toLowerCase().includes(w) ||
+            j.company.toLowerCase().includes(w) ||
+            j.description.toLowerCase().includes(w) ||
+            j.tags.some((t) => t.toLowerCase().includes(w))
+          )
+        );
+      });
+
+      // Score matching relevance
+      result = result.map((j) => {
+        let score = 0;
+        if (j.title.toLowerCase().includes(searchVal)) score += 100;
+        if (j.description.toLowerCase().includes(searchVal)) score += 20;
+
+        searchWords.forEach((word) => {
+          if (j.title.toLowerCase().includes(word)) score += 15;
+          if (j.tags.some((t) => t.toLowerCase().includes(word))) score += 10;
+          if (j.company.toLowerCase().includes(word)) score += 5;
+          if (j.description.toLowerCase().includes(word)) score += 2;
+        });
+        return { ...j, _score: score };
+      });
+
+      // Sort by score descending
+      result.sort((a, b) => b._score - a._score);
     }
 
     return new MockQuery(result);
