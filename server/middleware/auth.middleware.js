@@ -19,15 +19,37 @@ export const protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     let user = await User.findById(decoded.id);
 
-    if (!user && process.env.USE_MOCK_DB === 'true' && decoded.email) {
-      // Container recycled: recreate the mock user dynamically with correct id and role
-      user = await User.create({
-        _id: decoded.id,
-        name: decoded.name || 'Mock User',
-        email: decoded.email,
-        role: decoded.role || 'user',
-        isVerified: true
-      });
+    if (!user && process.env.USE_MOCK_DB === 'true') {
+      let email = decoded.email;
+      let name = decoded.name;
+      let role = decoded.role;
+
+      // Handle legacy JWT tokens that only encoded user ID
+      if (!email) {
+        if (decoded.id === 'mock-user-admin') {
+          email = 'admin@hirewave.com';
+          name = 'Admin User';
+          role = 'admin';
+        } else if (decoded.id === 'mock-user-demo') {
+          email = 'demo@hirewave.com';
+          name = 'Demo User';
+          role = 'user';
+        }
+      }
+
+      if (email) {
+        user = await User.findOne({ email: email.toLowerCase() });
+        if (!user) {
+          // Container recycled: recreate the mock user dynamically
+          user = await User.create({
+            _id: decoded.id,
+            name: name || 'Mock User',
+            email: email,
+            role: role || 'user',
+            isVerified: true
+          });
+        }
+      }
     }
 
     if (!user) {
@@ -61,14 +83,35 @@ export const optionalAuth = async (req, res, next) => {
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       let user = await User.findById(decoded.id);
-      if (!user && process.env.USE_MOCK_DB === 'true' && decoded.email) {
-        user = await User.create({
-          _id: decoded.id,
-          name: decoded.name || 'Mock User',
-          email: decoded.email,
-          role: decoded.role || 'user',
-          isVerified: true
-        });
+      if (!user && process.env.USE_MOCK_DB === 'true') {
+        let email = decoded.email;
+        let name = decoded.name;
+        let role = decoded.role;
+
+        if (!email) {
+          if (decoded.id === 'mock-user-admin') {
+            email = 'admin@hirewave.com';
+            name = 'Admin User';
+            role = 'admin';
+          } else if (decoded.id === 'mock-user-demo') {
+            email = 'demo@hirewave.com';
+            name = 'Demo User';
+            role = 'user';
+          }
+        }
+
+        if (email) {
+          user = await User.findOne({ email: email.toLowerCase() });
+          if (!user) {
+            user = await User.create({
+              _id: decoded.id,
+              name: name || 'Mock User',
+              email: email,
+              role: role || 'user',
+              isVerified: true
+            });
+          }
+        }
       }
       req.user = user;
     }

@@ -32,9 +32,18 @@ router.get('/google', async (req, res, next) => {
           isVerified: true,
         });
       }
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-      });
+      const token = jwt.sign(
+        { 
+          id: user._id, 
+          name: user.name, 
+          email: user.email, 
+          role: user.role 
+        }, 
+        process.env.JWT_SECRET, 
+        {
+          expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+        }
+      );
       return res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/auth/callback?token=${token}`);
     } catch (err) {
       return next(err);
