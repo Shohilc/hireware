@@ -1,6 +1,14 @@
 import { Bookmark, BookmarkCheck } from 'lucide-react';
 import { cn, timeAgo, formatSalary } from '@/lib/utils';
 
+const sourceColors = {
+  naukri: 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-500/20',
+  indeed: 'bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-500/20',
+  linkedin: 'bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-100 dark:border-sky-500/20',
+  internshala: 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 border-green-100 dark:border-green-500/20',
+  glassdoor: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-500/20',
+};
+
 export default function JobCard({ job, onBookmark, isBookmarked, onClick }) {
   const isSaved = isBookmarked || job.isBookmarked;
 
@@ -11,12 +19,22 @@ export default function JobCard({ job, onBookmark, isBookmarked, onClick }) {
     >
       {/* Top row: logo + save button */}
       <div className="flex items-start justify-between mb-5">
-        <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden ring-1 ring-zinc-100 dark:ring-zinc-800">
-          {job.logo ? (
-            <img src={job.logo} alt={job.company} className="w-7 h-7 object-contain" />
-          ) : (
-            <span className="text-lg font-bold text-zinc-600 dark:text-zinc-300">
-              {job.company?.[0]?.toUpperCase() || '?'}
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden ring-1 ring-zinc-100 dark:ring-zinc-800">
+            {job.logo ? (
+              <img src={job.logo} alt={job.company} className="w-7 h-7 object-contain" />
+            ) : (
+              <span className="text-lg font-bold text-zinc-600 dark:text-zinc-300">
+                {job.company?.[0]?.toUpperCase() || '?'}
+              </span>
+            )}
+          </div>
+          {job.source && (
+            <span className={cn(
+              "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border",
+              sourceColors[job.source.toLowerCase()] || "bg-zinc-50 dark:bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-100 dark:border-zinc-500/20"
+            )}>
+              {job.source}
             </span>
           )}
         </div>
