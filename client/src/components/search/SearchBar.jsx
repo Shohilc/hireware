@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Search, MapPin, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useFilterStore } from '@/store/filterStore';
 
 const popularSearches = [
   'React Developer', 'Full Stack', 'Data Scientist', 'DevOps Engineer',
@@ -9,8 +10,14 @@ const popularSearches = [
 ];
 
 export default function SearchBar({ onSearch, className, size = 'default' }) {
-  const [query, setQuery] = useState('');
-  const [location, setLocation] = useState('');
+  const filters = useFilterStore();
+  const [query, setQuery] = useState(filters.search || '');
+  const [location, setLocation] = useState(filters.location || '');
+
+  useEffect(() => {
+    setQuery(filters.search || '');
+    setLocation(filters.location || '');
+  }, [filters.search, filters.location]);
   const [focused, setFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef(null);
@@ -18,10 +25,8 @@ export default function SearchBar({ onSearch, className, size = 'default' }) {
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    if (query.trim()) {
-      onSearch?.(query.trim(), location.trim());
-      setShowSuggestions(false);
-    }
+    onSearch?.(query.trim(), location.trim());
+    setShowSuggestions(false);
   };
 
   const handleSuggestionClick = (suggestion) => {
