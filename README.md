@@ -14,6 +14,13 @@ A production-ready job portal that **aggregates jobs** from multiple platforms (
 | **Cache** | Redis (Upstash) — with in-memory fallback |
 | **State** | Zustand |
 
+## ✨ Features & Enhancements
+
+- **🏷️ Platform Origin Badges:** Every job card displays a custom branding pill badge corresponding to its source platform (LinkedIn, Naukri, Indeed, Internshala, or Glassdoor).
+- **⚡ Zero-Delay Auth Persistence:** Instantly loads session tokens from storage before mounting. This avoids unauthenticated UI flashes on page refreshes during Vercel container recycles.
+- **🎯 Interactive Categories:** Clicking category grid cards on the landing page triggers pre-filtered jobs feed searches and resets view scroll coordinates.
+- **🔍 Relevance-Based Search:** Calculates keyword match weights (e.g., title matches get higher weights than descriptions) and sorts the most relevant roles to the top.
+
 ## 📦 Quick Start
 
 ### Prerequisites
