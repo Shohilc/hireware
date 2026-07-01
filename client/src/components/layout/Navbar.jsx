@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Briefcase, BookmarkCheck, User, LogOut, ChevronDown, Sparkles, ClipboardList, Brain, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
 
@@ -23,7 +24,9 @@ const authLinks = [
 export default function Navbar({ onLoginClick, onSignupClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
+  const token = useAuthStore((s) => s.token);
+  const hydrated = useAuthStore((s) => s._hydrated);
   const location = useLocation();
 
   const userMenuRef = useRef(null);
@@ -73,7 +76,9 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
           {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            {isAuthenticated ? (
+            {!hydrated ? (
+              <div className="w-24 h-8 bg-zinc-200/20 dark:bg-zinc-800/20 rounded-lg animate-pulse" />
+            ) : token ? (
               <div ref={userMenuRef} className="relative">
                 <button
                   type="button"
@@ -186,7 +191,9 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
                   {link.label}
                 </Link>
               ))}
-              {isAuthenticated ? (
+              {!hydrated ? (
+                <div className="h-20 mx-4 bg-zinc-200/20 dark:bg-zinc-800/20 rounded-lg animate-pulse" />
+              ) : token ? (
                 <>
                   {authLinks.map((link) => (
                     <Link

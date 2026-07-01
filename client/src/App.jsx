@@ -24,10 +24,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
 
 function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuth();
-  const hasHydrated = useAuthStore((state) => state._hasHydrated);
+  const token = useAuthStore((s) => s.token);
+  const hydrated = useAuthStore((s) => s._hydrated);
 
-  if (!hasHydrated) {
+  if (!hydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-page dark:bg-page-dark transition-colors duration-500 ease-smooth">
         <Loader2 className="w-8 h-8 text-brand-400 animate-spin" />
@@ -35,7 +35,7 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!token) {
     return <Navigate to="/" replace />;
   }
   return children;

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/authStore';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -32,12 +33,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear auth state on 401
-      localStorage.removeItem('hirewave-auth');
-      // Only redirect if not already on auth page
+      // Clear auth state reactively on 401 using Zustand
+      useAuthStore.getState().logout();
       if (!window.location.pathname.includes('/auth')) {
-        // Don't hard redirect — let the app handle it
-        window.dispatchEvent(new CustomEvent('auth:expired'));
+        window.location.href = '/';
       }
     }
     return Promise.reject(error);
