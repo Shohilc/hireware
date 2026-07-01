@@ -21,19 +21,21 @@ import Admin from '@/pages/Admin';
 import NotFound from '@/pages/NotFound';
 
 import { useAuth } from '@/hooks/useAuth';
+import { useAuthStore } from '@/store/authStore';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
-  const hasLocalToken = !!localStorage.getItem('hirewave-auth');
+  const hasHydrated = useAuthStore((state) => state._hasHydrated);
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-page dark:bg-page-dark transition-colors duration-500 ease-smooth">
+        <Loader2 className="w-8 h-8 text-brand-400 animate-spin" />
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
-    if (hasLocalToken) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-page dark:bg-page-dark transition-colors duration-500 ease-smooth">
-          <Loader2 className="w-8 h-8 text-brand-400 animate-spin" />
-        </div>
-      );
-    }
     return <Navigate to="/" replace />;
   }
   return children;

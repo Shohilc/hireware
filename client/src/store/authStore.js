@@ -9,6 +9,9 @@ export const useAuthStore = create(
       token: null,
       isLoading: false,
       error: null,
+      _hasHydrated: false,
+
+      setHasHydrated: (val) => set({ _hasHydrated: val }),
 
       login: async (email, password) => {
         set({ isLoading: true, error: null });
@@ -68,6 +71,9 @@ export const useAuthStore = create(
     {
       name: 'hirewave-auth',
       partialize: (state) => ({ token: state.token, user: state.user }),
+      onRehydrateStorage: () => (state) => {
+        state.setHasHydrated(true);
+      },
     }
   )
 );
