@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-export function CardHoverEffect({ items, className }) {
+export function CardHoverEffect({ items, className, onItemClick }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
@@ -10,9 +10,10 @@ export function CardHoverEffect({ items, className }) {
       {items.map((item, idx) => (
         <div
           key={idx}
-          className="relative group block p-2"
+          className="relative group block p-2 cursor-pointer"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
+          onClick={() => onItemClick && onItemClick(item, idx)}
         >
           {hoveredIndex === idx && (
             <motion.span

@@ -153,7 +153,10 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <CardHoverEffect items={categories} />
+          <CardHoverEffect
+            items={categories}
+            onItemClick={(category) => handleSearch(category.title, '')}
+          />
         </div>
       </section>
 
