@@ -5,6 +5,7 @@ import { Menu, X, Briefcase, BookmarkCheck, User, LogOut, ChevronDown, Sparkles,
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
+import { useHydration } from '@/hooks/useHydration';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
 
@@ -26,7 +27,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const token = useAuthStore((s) => s.token);
-  const hydrated = useAuthStore((s) => s._hydrated);
+  const hydrated = useHydration();
   const location = useLocation();
 
   const userMenuRef = useRef(null);

@@ -22,10 +22,11 @@ import NotFound from '@/pages/NotFound';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
+import { useHydration } from '@/hooks/useHydration';
 
 function ProtectedRoute({ children }) {
   const token = useAuthStore((s) => s.token);
-  const hydrated = useAuthStore((s) => s._hydrated);
+  const hydrated = useHydration();
 
   if (!hydrated) {
     return (
