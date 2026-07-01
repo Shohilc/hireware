@@ -6,9 +6,11 @@ import bcrypt from 'bcryptjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const JOBS_FILE = path.join(__dirname, 'mockJobs.json');
-const USERS_FILE = path.join(__dirname, 'mockUsers.json');
-const APPLICATIONS_FILE = path.join(__dirname, 'mockApplications.json');
+// On Vercel, use /tmp for writable storage; locally use the config directory
+const STORAGE_DIR = process.env.VERCEL ? '/tmp' : __dirname;
+const JOBS_FILE = path.join(STORAGE_DIR, 'mockJobs.json');
+const USERS_FILE = path.join(STORAGE_DIR, 'mockUsers.json');
+const APPLICATIONS_FILE = path.join(STORAGE_DIR, 'mockApplications.json');
 
 // Initial Mock Job database
 const initialJobs = [

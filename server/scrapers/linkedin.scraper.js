@@ -8,7 +8,7 @@ import * as cheerio from 'cheerio';
 export async function scrapeLinkedIn(query, location) {
   const q = encodeURIComponent(query);
   const loc = encodeURIComponent(location);
-  const url = `https://www.linkedin.com/jobs/search?keywords=${q}&location=${loc}&position=1&pageNum=0`;
+  const url = `https://www.linkedin.com/jobs/search?keywords=${q}&location=${loc}&f_TPR=r604800&position=1&pageNum=0`;
   
   console.log(`🔍 Scraping LinkedIn: ${url}`);
 

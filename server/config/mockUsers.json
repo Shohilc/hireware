@@ -73,9 +73,9 @@
     },
     "role": "user",
     "isVerified": false,
-    "lastLogin": "2026-06-30T14:30:19.959Z",
+    "lastLogin": "2026-06-30T17:00:56.074Z",
     "createdAt": "2026-06-30T14:30:07.210Z",
-    "updatedAt": "2026-06-30T14:30:19.962Z"
+    "updatedAt": "2026-06-30T17:00:56.076Z"
   },
   {
     "_id": "mock-user-uyl3az8g4",
@@ -101,8 +101,7 @@
     "name": "Admin User",
     "email": "admin@hirewave.com",
     "password": "$2a$12$1xcV0e6Hc872QDWMO79S5ugLgfOWmKj/6d2TScWtA8Ua5u.Jqp4R6",
-    "role": "admin",
-    "isVerified": true,
+    "googleId": null,
     "avatar": null,
     "bookmarks": [],
     "profile": {
@@ -112,7 +111,10 @@
       "resume": "",
       "bio": ""
     },
+    "role": "admin",
+    "isVerified": true,
+    "lastLogin": "2026-06-30T17:15:16.509Z",
     "createdAt": "2026-06-30T14:31:59.263Z",
-    "updatedAt": "2026-06-30T14:31:59.263Z"
+    "updatedAt": "2026-06-30T17:15:16.511Z"
   }
 ]

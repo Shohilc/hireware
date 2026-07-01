@@ -89,11 +89,19 @@ app.use((_req, res) => {
 app.use(errorHandler);
 
 // Start scheduler for automatic scraping
-startScheduler();
+if (!process.env.VERCEL) {
+  startScheduler();
+}
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 HireWave server running on port ${PORT}`);
-  console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
-});
+// Only listen when running locally (not on Vercel serverless)
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 HireWave server running on port ${PORT}`);
+    console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  });
+}
+
+// Export for Vercel serverless
+export default app;
