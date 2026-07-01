@@ -5,7 +5,6 @@ import { Menu, X, Briefcase, BookmarkCheck, User, LogOut, ChevronDown, Sparkles,
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
-import { useHydration } from '@/hooks/useHydration';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
 
@@ -27,7 +26,6 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const token = useAuthStore((s) => s.token);
-  const hydrated = useHydration();
   const location = useLocation();
 
   const userMenuRef = useRef(null);
@@ -77,9 +75,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
           {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            {!hydrated ? (
-              <div className="w-24 h-8 bg-zinc-200/20 dark:bg-zinc-800/20 rounded-lg animate-pulse" />
-            ) : token ? (
+            {token ? (
               <div ref={userMenuRef} className="relative">
                 <button
                   type="button"
@@ -192,9 +188,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
                   {link.label}
                 </Link>
               ))}
-              {!hydrated ? (
-                <div className="h-20 mx-4 bg-zinc-200/20 dark:bg-zinc-800/20 rounded-lg animate-pulse" />
-              ) : token ? (
+              {token ? (
                 <>
                   {authLinks.map((link) => (
                     <Link

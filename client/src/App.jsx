@@ -22,19 +22,9 @@ import NotFound from '@/pages/NotFound';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
-import { useHydration } from '@/hooks/useHydration';
 
 function ProtectedRoute({ children }) {
   const token = useAuthStore((s) => s.token);
-  const hydrated = useHydration();
-
-  if (!hydrated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-page dark:bg-page-dark transition-colors duration-500 ease-smooth">
-        <Loader2 className="w-8 h-8 text-brand-400 animate-spin" />
-      </div>
-    );
-  }
 
   if (!token) {
     return <Navigate to="/" replace />;
