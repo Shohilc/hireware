@@ -24,7 +24,18 @@ import { useAuth } from '@/hooks/useAuth';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/" replace />;
+  const hasLocalToken = !!localStorage.getItem('hirewave-auth');
+
+  if (!isAuthenticated) {
+    if (hasLocalToken) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-page dark:bg-page-dark transition-colors duration-500 ease-smooth">
+          <Loader2 className="w-8 h-8 text-brand-400 animate-spin" />
+        </div>
+      );
+    }
+    return <Navigate to="/" replace />;
+  }
   return children;
 }
 
