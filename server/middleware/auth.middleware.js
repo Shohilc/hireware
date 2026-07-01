@@ -17,7 +17,18 @@ export const protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    let user = await User.findById(decoded.id);
+
+    if (!user && process.env.USE_MOCK_DB === 'true' && decoded.email) {
+      // Container recycled: recreate the mock user dynamically with correct id and role
+      user = await User.create({
+        _id: decoded.id,
+        name: decoded.name || 'Mock User',
+        email: decoded.email,
+        role: decoded.role || 'user',
+        isVerified: true
+      });
+    }
 
     if (!user) {
       return res.status(401).json({ message: 'Not authorized — user not found' });
@@ -49,7 +60,17 @@ export const optionalAuth = async (req, res, next) => {
 
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id);
+      let user = await User.findById(decoded.id);
+      if (!user && process.env.USE_MOCK_DB === 'true' && decoded.email) {
+        user = await User.create({
+          _id: decoded.id,
+          name: decoded.name || 'Mock User',
+          email: decoded.email,
+          role: decoded.role || 'user',
+          isVerified: true
+        });
+      }
+      req.user = user;
     }
   } catch {
     // Silently continue without auth

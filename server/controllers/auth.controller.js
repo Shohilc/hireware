@@ -1,10 +1,19 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-const signToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  });
+const signToken = (user) =>
+  jwt.sign(
+    { 
+      id: user._id, 
+      name: user.name, 
+      email: user.email, 
+      role: user.role 
+    }, 
+    process.env.JWT_SECRET, 
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+    }
+  );
 
 const sanitizeUser = (user) => ({
   id: user._id,
@@ -32,7 +41,7 @@ export const register = async (req, res, next) => {
     }
 
     const user = await User.create({ name, email, password });
-    const token = signToken(user._id);
+    const token = signToken(user);
 
     res.status(201).json({ token, user: sanitizeUser(user) });
   } catch (err) {
@@ -56,7 +65,7 @@ export const login = async (req, res, next) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = signToken(user._id);
+    const token = signToken(user);
     res.json({ token, user: sanitizeUser(user) });
   } catch (err) {
     next(err);
@@ -74,7 +83,7 @@ export const getMe = async (req, res, next) => {
 };
 
 export const googleCallback = (req, res) => {
-  const token = signToken(req.user._id);
+  const token = signToken(req.user);
   res.redirect(`${process.env.CLIENT_URL}/auth/callback?token=${token}`);
 };
 
