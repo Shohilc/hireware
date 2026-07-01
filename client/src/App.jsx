@@ -66,12 +66,23 @@ function AuthCallback() {
   return <Navigate to="/dashboard" replace />;
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function AppContent() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
 
   return (
     <>
+      <ScrollToTop />
       <Navbar
         onLoginClick={() => setLoginOpen(true)}
         onSignupClick={() => setSignupOpen(true)}
