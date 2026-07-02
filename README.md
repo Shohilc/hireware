@@ -61,8 +61,8 @@ See `server/.env.example` for all required variables. Key ones:
 | Naukri | ✅ Active | Puppeteer |
 | Indeed | ✅ Active | Cheerio |
 | Internshala | ✅ Active | Cheerio |
-| LinkedIn | ⚠️ Stubbed | Blocked by ToS |
-| Glassdoor | ⚠️ Stubbed | Requires auth |
+| LinkedIn | ✅ Active | Cheerio (Guest Portal) / Apify API |
+| Glassdoor | ⚠️ Stubbed | Requires authentication |
 
 Jobs are auto-scraped every 6 hours via node-cron, or can be triggered manually by authenticated users.
 
