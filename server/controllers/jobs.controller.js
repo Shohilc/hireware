@@ -1,6 +1,7 @@
 import Job from '../models/Job.js';
 import User from '../models/User.js';
 import { runAllScrapers } from '../scrapers/index.js';
+import { fillMissingDetails } from '../utils/normalizeJob.js';
 
 export const getJobs = async (req, res, next) => {
   try {
@@ -40,10 +41,13 @@ export const getJobs = async (req, res, next) => {
       bookmarkedIds = user?.bookmarks?.map((id) => id.toString()) || [];
     }
 
-    const jobsWithBookmark = jobs.map((job) => ({
-      ...job,
-      isBookmarked: bookmarkedIds.includes(job._id.toString()),
-    }));
+    const jobsWithBookmark = jobs.map((job) => {
+      const filled = fillMissingDetails(job);
+      return {
+        ...filled,
+        isBookmarked: bookmarkedIds.includes(job._id.toString()),
+      };
+    });
 
     res.json({
       jobs: jobsWithBookmark,
@@ -91,8 +95,10 @@ export const searchJobs = async (req, res, next) => {
       Job.countDocuments(filter),
     ]);
 
+    const jobsWithDetails = jobs.map((j) => fillMissingDetails(j));
+
     res.json({
-      jobs,
+      jobs: jobsWithDetails,
       total,
       pages: Math.ceil(total / Number(limit)),
       page: Number(page),
@@ -104,7 +110,7 @@ export const searchJobs = async (req, res, next) => {
 
 export const getJobBySlug = async (req, res, next) => {
   try {
-    const job = await Job.findOneAndUpdate(
+    let job = await Job.findOneAndUpdate(
       { slug: req.params.slug },
       { $inc: { views: 1 } },
       { new: true }
@@ -113,6 +119,8 @@ export const getJobBySlug = async (req, res, next) => {
     if (!job) {
       return res.status(404).json({ message: 'Job not found' });
     }
+
+    job = fillMissingDetails(job);
 
     // Check if bookmarked by current user
     if (req.user) {
