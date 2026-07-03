@@ -27,7 +27,7 @@ export const authLimiter = rateLimit({
  */
 export const scrapeRateLimit = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 5,
+  max: 100,
   message: { message: 'Scrape rate limit exceeded. Please wait before triggering another scrape.' },
   standardHeaders: true,
   legacyHeaders: false,
