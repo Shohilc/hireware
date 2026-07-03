@@ -207,6 +207,7 @@ export const triggerScrape = async (req, res, next) => {
     res.json({
       scraped: jobs.length,
       message: `Scrape complete: ${jobs.length} jobs found for "${query}" in ${location}`,
+      jobs,
     });
   } catch (err) {
     next(err);
