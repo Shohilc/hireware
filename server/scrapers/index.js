@@ -187,8 +187,7 @@ function generateFallbackJobs(platform, query, location) {
     
     const cleanQuery = query.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const cleanCompany = company.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    // Using a timestamp + index makes this URL unique so it doesn't get deduplicated
-    const sourceUrl = `https://www.${platform}.com/job/${cleanCompany}-${cleanQuery}-${Date.now()}-${i}`;
+    const sourceUrl = `https://www.${platform}.com/mock-job/${cleanCompany}-${cleanQuery}-${Date.now()}-${i}`;
 
     jobs.push({
       title,
