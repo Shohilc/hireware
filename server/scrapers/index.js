@@ -185,9 +185,18 @@ function generateFallbackJobs(platform, query, location) {
     const sal = salaries[i % salaries.length];
     const desc = jobDescriptions[i % jobDescriptions.length];
     
-    const cleanQuery = query.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    const cleanCompany = company.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    const sourceUrl = `https://www.${platform}.com/mock-job/${cleanCompany}-${cleanQuery}-${Date.now()}-${i}`;
+    const qEnc = encodeURIComponent(query);
+    const locEnc = encodeURIComponent(location);
+    let sourceUrl = '';
+    if (platform === 'indeed') {
+      sourceUrl = `https://in.indeed.com/jobs?q=${qEnc}&l=${locEnc}`;
+    } else if (platform === 'naukri') {
+      sourceUrl = `https://www.naukri.com/${query.toLowerCase().replace(/\s+/g, '-')}-jobs-in-${location.toLowerCase().replace(/\s+/g, '-')}`;
+    } else if (platform === 'internshala') {
+      sourceUrl = `https://internshala.com/jobs/${query.toLowerCase().replace(/\s+/g, '-')}-jobs-in-${location.toLowerCase().replace(/\s+/g, '-')}`;
+    } else {
+      sourceUrl = `https://www.google.com/search?q=${encodeURIComponent(company + ' ' + query + ' jobs')}`;
+    }
 
     jobs.push({
       title,

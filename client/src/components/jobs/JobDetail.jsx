@@ -17,27 +17,7 @@ export default function JobDetail({ job, open, onClose, onBookmark }) {
   if (!job) return null;
 
   const handleApply = () => {
-    let url = job.sourceUrl || '';
-    const isMockUrl =
-      job._id?.startsWith('mock-job') ||
-      url.includes('/mock-job/') ||
-      url.includes('/fallback/') ||
-      url.includes('-mock');
-
-    if (isMockUrl) {
-      const q = encodeURIComponent(job.company + ' ' + job.title);
-      const loc = encodeURIComponent(job.location || 'India');
-      if (url.includes('indeed.com')) {
-        url = `https://in.indeed.com/jobs?q=${q}&l=${loc}`;
-      } else if (url.includes('naukri.com')) {
-        url = `https://www.naukri.com/${q.replace(/%20/g, '-')}-jobs-in-${loc.replace(/%20/g, '-')}`;
-      } else if (url.includes('internshala.com')) {
-        url = `https://www.google.com/search?q=site:internshala.com+${q}`;
-      } else {
-        url = `https://www.google.com/search?q=${encodeURIComponent(job.company + ' ' + job.title + ' jobs')}`;
-      }
-    }
-    window.open(url, '_blank');
+    window.open(job.sourceUrl, '_blank');
   };
 
   return (

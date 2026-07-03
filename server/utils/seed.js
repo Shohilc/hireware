@@ -22,7 +22,7 @@ const mockRawJobs = [
     ],
     experience: '5-8 years',
     source: 'naukri',
-    sourceUrl: 'https://www.naukri.com/job-listings-senior-react-developer-techwave-solutions-bangalore-5-to-8-years',
+    sourceUrl: 'https://www.naukri.com/react-developer-jobs-in-bangalore',
     type: 'Full-time',
     remote: false,
     postedAt: '2 days ago'
@@ -41,7 +41,7 @@ const mockRawJobs = [
     ],
     experience: '3-6 years',
     source: 'indeed',
-    sourceUrl: 'https://in.indeed.com/viewjob?jk=full-stack-engineer-cloudscale-remote',
+    sourceUrl: 'https://in.indeed.com/jobs?q=Full+Stack+Engineer&l=Remote',
     type: 'Full-time',
     remote: true,
     postedAt: 'Just now'
@@ -60,7 +60,7 @@ const mockRawJobs = [
     ],
     experience: 'Fresher',
     source: 'internshala',
-    sourceUrl: 'https://internshala.com/internship/detail/frontend-developer-intern-in-hyderabad-at-nextgen-labs',
+    sourceUrl: 'https://internshala.com/jobs/frontend-developer-jobs-in-hyderabad',
     type: 'Internship',
     remote: false,
     postedAt: 'today'
@@ -79,7 +79,7 @@ const mockRawJobs = [
     ],
     experience: '3-5 years',
     source: 'naukri',
-    sourceUrl: 'https://www.naukri.com/job-listings-devops-cloud-engineer-apex-systems-pune-3-to-5-years',
+    sourceUrl: 'https://www.naukri.com/devops-engineer-jobs-in-pune',
     type: 'Full-time',
     remote: false,
     postedAt: '4 days ago'
@@ -98,7 +98,7 @@ const mockRawJobs = [
     ],
     experience: '2-4 years',
     source: 'indeed',
-    sourceUrl: 'https://in.indeed.com/viewjob?jk=data-scientist-inference-ai-mumbai',
+    sourceUrl: 'https://in.indeed.com/jobs?q=Data+Scientist&l=Mumbai',
     type: 'Full-time',
     remote: false,
     postedAt: '1 week ago'
