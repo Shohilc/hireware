@@ -16,6 +16,33 @@ const sourceColors = {
 export default function JobDetail({ job, open, onClose, onBookmark }) {
   if (!job) return null;
 
+  const handleApply = () => {
+    let url = job.sourceUrl || '';
+    const isMockUrl =
+      url.includes('-mock') ||
+      (url.includes('indeed.com') && !/jk=[a-f0-9]{16}/i.test(url)) ||
+      url.includes('techwave-solutions') ||
+      url.includes('cloudscale-remote') ||
+      url.includes('nextgen-labs') ||
+      url.includes('apex-systems') ||
+      url.includes('inference-ai');
+
+    if (isMockUrl) {
+      const q = encodeURIComponent(job.title);
+      const loc = encodeURIComponent(job.location || 'India');
+      if (url.includes('indeed.com')) {
+        url = `https://in.indeed.com/jobs?q=${q}&l=${loc}`;
+      } else if (url.includes('naukri.com')) {
+        url = `https://www.naukri.com/${q.replace(/\s+/g, '-')}-jobs-in-${loc.replace(/\s+/g, '-')}`;
+      } else if (url.includes('internshala.com')) {
+        url = `https://internshala.com/jobs/${q.replace(/\s+/g, '-')}-jobs-in-${loc.replace(/\s+/g, '-')}`;
+      } else {
+        url = `https://www.google.com/search?q=${encodeURIComponent(job.company + ' ' + job.title + ' jobs')}`;
+      }
+    }
+    window.open(url, '_blank');
+  };
+
   return (
     <Sheet open={open} onOpenChange={onClose}>
       {/* Header */}
@@ -133,7 +160,7 @@ export default function JobDetail({ job, open, onClose, onBookmark }) {
           variant="glow"
           size="lg"
           className="flex-1"
-          onClick={() => window.open(job.sourceUrl, '_blank')}
+          onClick={handleApply}
         >
           Apply Now
           <ArrowUpRight className="w-4 h-4 ml-2" />

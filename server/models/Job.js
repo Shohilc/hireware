@@ -86,6 +86,20 @@ class MockQuery {
 const MockJobModel = {
   find: (filter = {}) => {
     let result = readJobs();
+
+    // Automatically deactivate mock jobs older than 30 days
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    let updated = false;
+    result.forEach((j) => {
+      if (j.isActive && new Date(j.postedAt) < thirtyDaysAgo) {
+        j.isActive = false;
+        updated = true;
+      }
+    });
+    if (updated) {
+      writeJobs(result);
+    }
+
     if (filter.isActive !== undefined) result = result.filter((j) => j.isActive === filter.isActive);
     if (filter.location instanceof RegExp) {
       result = result.filter((j) => filter.location.test(j.location));

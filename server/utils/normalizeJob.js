@@ -51,33 +51,26 @@ function inferJobType(raw) {
 function extractSalaryFromDescription(desc) {
   if (!desc || typeof desc !== 'string') return null;
 
-  // Regex patterns to detect salary ranges in description
   const patterns = [
-    // Lakhs/LPA range: e.g. "12 - 18 LPA", "8 to 12 Lakhs", "15-20lpa"
+    // 1. Lakhs/LPA range: e.g. "12 - 18 LPA", "8 to 12 Lakhs", "15-20lpa", "12-18 L"
     {
-      regex: /\b(\d+(?:\.\d+)?)\s*(?:-|to)\s*(\d+(?:\.\d+)?)\s*(?:LPA|Lakhs?|lakhs?|lakh|Lakh)\b/i,
+      regex: /\b(\d+(?:\.\d+)?)\s*(?:-|to)\s*(\d+(?:\.\d+)?)\s*(?:LPA|Lakhs?|lakhs?|lakh|Lakh|L\.P\.A\.|L)\b/i,
       multiplier: 100000,
       isUSD: false
     },
-    // USD k range: e.g. "$80k - $120k", "60k to 90k USD"
+    // 2. USD k range: e.g. "$80k - $120k", "60k to 90k USD"
     {
       regex: /(?:\$)?\s*(\d+(?:\.\d+)?)\s*k\s*(?:-|to)\s*(?:\$)?\s*(\d+(?:\.\d+)?)\s*k\b/i,
       multiplier: 1000,
       isUSD: true
     },
-    // Currency range with contextual prefix: e.g. "Salary: Rs. 500,000 - 800,000", "Stipend: ₹15,000 - ₹20,000"
+    // 3. Raw currency range with optional PA/PM: e.g. "₹ 12,00,000 - ₹ 18,00,000 P.A.", "Rs. 15,000 - 25,000 per month"
     {
-      regex: /\b(?:salary|ctc|compensation|stipend|package)\b.*?(?:Rs\.?|₹|\$)\s*(\d+[\d,.]*)\s*(?:-|to)\s*(?:Rs\.?|₹|\$)?\s*(\d+[\d,.]*)\b/i,
+      regex: /(?:Rs\.?|₹|\$)\s*(\d+[\d,.]*)\s*(?:-|to)\s*(?:Rs\.?|₹|\$)?\s*(\d+[\d,.]*)\b/i,
       multiplier: 1,
       isUSD: false
     },
-    // Generic currency hourly or monthly: e.g. "$50 - $75 per hour", "₹20,000 - ₹25,000 per month"
-    {
-      regex: /(?:\$|₹|\bRs\.?)\s*(\d+[\d,.]*)\s*(?:-|to)\s*(?:\$|₹|Rs\.?)?\s*(\d+[\d,.]*)\s*(?:per hour|\/hr|\/month|per month|yearly|per year|\/yr)\b/i,
-      multiplier: 1,
-      isUSD: false
-    },
-    // Simple numeric range with Lakhs/LPA: e.g. "offering 6 to 8 Lakhs"
+    // 4. Numeric range with contextual label suffix: e.g. "6 - 8 LPA"
     {
       regex: /\b(\d+(?:\.\d+)?)\s*(?:-|to)\s*(\d+(?:\.\d+)?)\s*(?:LPA|Lakhs?|lakhs?)\b/i,
       multiplier: 100000,
@@ -91,18 +84,18 @@ function extractSalaryFromDescription(desc) {
       const matchedStr = match[0];
       const isUSD = item.isUSD || /\$/i.test(matchedStr) || /usd/i.test(matchedStr);
       const isHourly = /hour|hr/i.test(matchedStr);
-      const isMonthly = /stipend|month/i.test(matchedStr) || /stipend/i.test(desc.slice(Math.max(0, match.index - 50), match.index + 50));
+      const isMonthly = /stipend|month|pm/i.test(matchedStr) || /stipend/i.test(desc.slice(Math.max(0, match.index - 50), match.index + 50));
       
-      let min = parseFloat(match[1].replace(/,/g, '')) * item.multiplier;
-      let max = parseFloat(match[2].replace(/,/g, '')) * item.multiplier;
+      let min = parseFloat(match[1].replace(/,/g, ''));
+      let max = parseFloat(match[2].replace(/,/g, ''));
 
-      // Handle raw lakhs value checks if not pre-multiplied
-      if (item.multiplier === 1 && !isHourly && !isMonthly) {
-        if (min < 200) {
-          min *= 100000;
-          max *= 100000;
-        }
+      let mult = item.multiplier;
+      if (mult === 1 && min < 200 && !isHourly && !isMonthly) {
+        mult = 100000;
       }
+
+      min *= mult;
+      max *= mult;
 
       let suffix = '';
       if (isHourly) suffix = ' per hour';
