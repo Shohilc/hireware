@@ -32,7 +32,7 @@ export default function JobDetail({ job, open, onClose, onBookmark }) {
       } else if (url.includes('naukri.com')) {
         url = `https://www.naukri.com/${q.replace(/%20/g, '-')}-jobs-in-${loc.replace(/%20/g, '-')}`;
       } else if (url.includes('internshala.com')) {
-        url = `https://internshala.com/jobs/${q.replace(/%20/g, '-')}-jobs-in-${loc.replace(/%20/g, '-')}`;
+        url = `https://www.google.com/search?q=site:internshala.com+${q}`;
       } else {
         url = `https://www.google.com/search?q=${encodeURIComponent(job.company + ' ' + job.title + ' jobs')}`;
       }
