@@ -7,10 +7,12 @@ export const getJobs = async (req, res, next) => {
   try {
     // Automatically deactivate expired jobs older than 30 days
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    await Job.updateMany(
-      { postedAt: { $lt: thirtyDaysAgo }, isActive: true },
-      { $set: { isActive: false } }
-    ).catch(() => {});
+    if (typeof Job.updateMany === 'function') {
+      await Job.updateMany(
+        { postedAt: { $lt: thirtyDaysAgo }, isActive: true },
+        { $set: { isActive: false } }
+      ).catch(() => {});
+    }
 
     const {
       page = 1,
@@ -71,10 +73,12 @@ export const searchJobs = async (req, res, next) => {
   try {
     // Automatically deactivate expired jobs older than 30 days
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    await Job.updateMany(
-      { postedAt: { $lt: thirtyDaysAgo }, isActive: true },
-      { $set: { isActive: false } }
-    ).catch(() => {});
+    if (typeof Job.updateMany === 'function') {
+      await Job.updateMany(
+        { postedAt: { $lt: thirtyDaysAgo }, isActive: true },
+        { $set: { isActive: false } }
+      ).catch(() => {});
+    }
 
     const {
       q,

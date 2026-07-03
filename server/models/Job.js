@@ -177,6 +177,23 @@ const MockJobModel = {
 
     return new MockQuery(result);
   },
+  updateMany: (query = {}, update = {}) => {
+    const jobs = readJobs();
+    let count = 0;
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    
+    jobs.forEach((j) => {
+      if (j.isActive && new Date(j.postedAt) < thirtyDaysAgo) {
+        j.isActive = false;
+        count++;
+      }
+    });
+    
+    if (count > 0) {
+      writeJobs(jobs);
+    }
+    return Promise.resolve({ modifiedCount: count });
+  },
   countDocuments: (filter = {}) => {
     const result = MockJobModel.find(filter).data;
     return Promise.resolve(result.length);
