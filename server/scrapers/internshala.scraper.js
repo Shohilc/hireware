@@ -24,11 +24,27 @@ export async function scrapeInternshala(query, location) {
       const link = $(el).find('a.job-title-href, a.view_detail_button, h3 a');
       const href = link.attr('href');
 
+      let salary = '';
+      let experience = '';
+      $(el).find('.detail-row-1 .row-1-item, .row-1-item').each((_, item) => {
+        const text = $(item).text().trim().replace(/\s+/g, ' ');
+        if (text.includes('₹') || text.includes('/year') || text.includes('/month') || text.includes('LPA')) {
+          const mobileText = $(item).find('.mobile').text().trim().replace(/\s+/g, ' ');
+          salary = mobileText || text;
+        } else if (text.toLowerCase().includes('experience') || text.toLowerCase().includes('year') || text.toLowerCase().includes('fresher')) {
+          experience = text;
+        }
+      });
+
+      const rawCompany = $(el).find('.company-name, .company_name').text().replace(/\s+/g, ' ').trim();
+      const company = rawCompany.split(' Actively')[0].trim();
+
       jobs.push({
-        title: link.text().trim() || $(el).find('.profile').text().trim(),
-        company: $(el).find('.company-name, .company_name').text().trim(),
-        location: $(el).find('.locations span, .location_link').text().trim(),
-        salary: $(el).find('.stipend, .desktop-salary').text().trim(),
+        title: link.text().replace(/\s+/g, ' ').trim() || $(el).find('.profile').text().replace(/\s+/g, ' ').trim(),
+        company,
+        location: $(el).find('.locations span, .location_link').text().replace(/\s+/g, ' ').trim(),
+        salary,
+        experience,
         sourceUrl: href ? (href.startsWith('http') ? href : `https://internshala.com${href}`) : '',
         source: 'internshala',
         type: 'Full-time',
