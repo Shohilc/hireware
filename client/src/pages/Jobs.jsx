@@ -69,7 +69,15 @@ export default function Jobs() {
     }
     setScraping(true);
     try {
-      const result = await triggerScrape(filters.search || 'software engineer', filters.location || 'Bangalore');
+      const activeFilters = {
+        location: filters.location,
+        type: filters.type,
+        source: filters.source,
+        remote: filters.remote,
+        sort: filters.sort,
+        experience: filters.experience,
+      };
+      const result = await triggerScrape(filters.search || 'software engineer', filters.location || 'Bangalore', activeFilters);
       toast.success(result.message);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Scrape failed');

@@ -1,6 +1,104 @@
 import { create } from 'zustand';
 import api from '../lib/axios';
 
+// --- Client-side search and filtering helpers for scraped jobs in LocalStorage ---
+
+function matchSearchQuery(job, query) {
+  if (!query) return true;
+  const searchWords = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (searchWords.length === 0) return true;
+  
+  const titleL = job.title?.toLowerCase() || '';
+  const compL = job.company?.toLowerCase() || '';
+  const descL = job.description?.toLowerCase() || '';
+  const tagsL = job.tags?.map(t => t.toLowerCase()) || [];
+  
+  return searchWords.every(word =>
+    titleL.includes(word) ||
+    compL.includes(word) ||
+    descL.includes(word) ||
+    tagsL.some(t => t.includes(word))
+  );
+}
+
+function matchExperience(jobExpText, filterExp) {
+  if (!filterExp) return true;
+  if (!jobExpText) return false;
+  
+  const filter = filterExp.toLowerCase();
+  const jobExp = jobExpText.toLowerCase();
+
+  if (filter.includes('fresher')) {
+    return jobExp.includes('fresher') || jobExp.includes('0 yr') || jobExp.startsWith('0-') || jobExp.includes('0 to');
+  }
+
+  let filterMin = 0, filterMax = 100;
+  if (filter.includes('10+')) {
+    filterMin = 10;
+  } else {
+    const match = filter.match(/(\d+)\s*-\s*(\d+)/);
+    if (match) {
+      filterMin = parseInt(match[1], 10);
+      filterMax = parseInt(match[2], 10);
+    }
+  }
+
+  let jobMin = 0, jobMax = 0;
+  const rangeMatch = jobExp.match(/(\d+)\s*(-|to)\s*(\d+)/);
+  if (rangeMatch) {
+    jobMin = parseInt(rangeMatch[1], 10);
+    jobMax = parseInt(rangeMatch[3], 10);
+  } else {
+    const singleMatch = jobExp.match(/(\d+)/);
+    if (singleMatch) {
+      jobMin = parseInt(singleMatch[1], 10);
+      jobMax = jobMin;
+    }
+  }
+
+  return Math.max(filterMin, jobMin) <= Math.min(filterMax, jobMax);
+}
+
+function matchLocation(jobLoc, filterLoc) {
+  if (!filterLoc) return true;
+  if (!jobLoc) return false;
+  
+  const fLoc = filterLoc.toLowerCase();
+  const jLoc = jobLoc.toLowerCase();
+  
+  if (fLoc === 'remote') {
+    return jLoc.includes('remote');
+  }
+  
+  return jLoc.includes(fLoc) || fLoc.includes(jLoc);
+}
+
+function filterJobsList(jobs, query, filters) {
+  return jobs.filter((j) => {
+    // 1. Search Query
+    if (query && !matchSearchQuery(j, query)) return false;
+    
+    // 2. Location
+    if (filters.location && !matchLocation(j.location, filters.location)) return false;
+    
+    // 3. Job Type
+    if (filters.type && j.type?.toLowerCase() !== filters.type.toLowerCase()) return false;
+    
+    // 4. Source Platform
+    if (filters.source && j.source?.toLowerCase() !== filters.source.toLowerCase()) return false;
+    
+    // 5. Remote Only
+    if (filters.remote && !j.remote && !j.location?.toLowerCase().includes('remote')) return false;
+    
+    // 6. Experience
+    if (filters.experience && !matchExperience(j.experience, filters.experience)) return false;
+    
+    return true;
+  });
+}
+
+// --- Zustand Store ---
+
 export const useJobStore = create((set, get) => {
   let initialScraped = [];
   try {
@@ -37,32 +135,7 @@ export const useJobStore = create((set, get) => {
         let mergedJobs = [...data.jobs];
         const seen = new Set(mergedJobs.map((j) => j.sourceUrl));
 
-        let filteredScraped = [...scrapedJobs];
-        if (filters.location) {
-          const loc = filters.location.toLowerCase();
-          filteredScraped = filteredScraped.filter((j) =>
-            j.location?.toLowerCase().includes(loc)
-          );
-        }
-        if (filters.type) {
-          filteredScraped = filteredScraped.filter((j) =>
-            j.type?.toLowerCase() === filters.type.toLowerCase()
-          );
-        }
-        if (filters.source) {
-          filteredScraped = filteredScraped.filter((j) =>
-            j.source?.toLowerCase() === filters.source.toLowerCase()
-          );
-        }
-        if (filters.remote) {
-          filteredScraped = filteredScraped.filter((j) => j.remote);
-        }
-        if (filters.experience) {
-          const exp = filters.experience.toLowerCase();
-          filteredScraped = filteredScraped.filter((j) =>
-            j.experience?.toLowerCase().includes(exp)
-          );
-        }
+        const filteredScraped = filterJobsList(scrapedJobs, '', filters);
 
         for (const j of filteredScraped) {
           if (j.sourceUrl && !seen.has(j.sourceUrl)) {
@@ -111,41 +184,7 @@ export const useJobStore = create((set, get) => {
         let mergedJobs = [...data.jobs];
         const seen = new Set(mergedJobs.map((j) => j.sourceUrl));
 
-        let filteredScraped = [...scrapedJobs];
-        if (query) {
-          const q = query.toLowerCase();
-          filteredScraped = filteredScraped.filter((j) =>
-            j.title?.toLowerCase().includes(q) ||
-            j.company?.toLowerCase().includes(q) ||
-            j.description?.toLowerCase().includes(q) ||
-            j.tags?.some((t) => t.toLowerCase().includes(q))
-          );
-        }
-        if (filters.location) {
-          const loc = filters.location.toLowerCase();
-          filteredScraped = filteredScraped.filter((j) =>
-            j.location?.toLowerCase().includes(loc)
-          );
-        }
-        if (filters.type) {
-          filteredScraped = filteredScraped.filter((j) =>
-            j.type?.toLowerCase() === filters.type.toLowerCase()
-          );
-        }
-        if (filters.source) {
-          filteredScraped = filteredScraped.filter((j) =>
-            j.source?.toLowerCase() === filters.source.toLowerCase()
-          );
-        }
-        if (filters.remote) {
-          filteredScraped = filteredScraped.filter((j) => j.remote);
-        }
-        if (filters.experience) {
-          const exp = filters.experience.toLowerCase();
-          filteredScraped = filteredScraped.filter((j) =>
-            j.experience?.toLowerCase().includes(exp)
-          );
-        }
+        const filteredScraped = filterJobsList(scrapedJobs, query, filters);
 
         for (const j of filteredScraped) {
           if (j.sourceUrl && !seen.has(j.sourceUrl)) {
@@ -201,7 +240,7 @@ export const useJobStore = create((set, get) => {
       }
     },
 
-    triggerScrape: async (query, location) => {
+    triggerScrape: async (query, location, activeFilters = {}) => {
       const { data } = await api.post('/jobs/scrape', { query, location });
       const newJobs = data.jobs || [];
       const currentScraped = get().scrapedJobs || [];
@@ -219,7 +258,11 @@ export const useJobStore = create((set, get) => {
       set({ scrapedJobs: unique });
       localStorage.setItem('scrapedJobs', JSON.stringify(unique));
       
-      await get().fetchJobs();
+      if (query && query !== 'software engineer') {
+        await get().searchJobs(query, activeFilters);
+      } else {
+        await get().fetchJobs(activeFilters);
+      }
       return data;
     },
 
