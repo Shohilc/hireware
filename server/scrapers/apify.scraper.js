@@ -6,7 +6,7 @@ import axios from 'axios';
  */
 export async function scrapeApify(query, location) {
   const token = process.env.APIFY_TOKEN;
-  const rawActorId = process.env.APIFY_ACTOR_ID || 'apify~linkedin-jobs-scraper';
+  const rawActorId = process.env.APIFY_ACTOR_ID || 'johnvc~linkedin-jobs-api';
   const actorId = rawActorId.replace('/', '~');
 
   if (!token || token === 'your_apify_token_here') {
@@ -22,9 +22,9 @@ export async function scrapeApify(query, location) {
     const url = `https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items?token=${token}`;
     
     const input = {
-      queries: `${query}\n${location}`,
-      limit: 10,
+      keyword: query,
       location: location,
+      maxJobs: 10,
     };
 
     const { data } = await axios.post(url, input, {
@@ -50,8 +50,8 @@ export async function scrapeApify(query, location) {
         location: item.location || location,
         sourceUrl,
         source: 'linkedin', // mark as LinkedIn since it scrapes LinkedIn
-        type: item.jobType || 'Full-time',
-        postedAt: item.postedAt || item.postDate || 'Recently',
+        type: item.employmentType || item.jobType || 'Full-time',
+        postedAt: item.postedDate || item.postedAgo || item.postedAt || item.postDate || 'Recently',
         salary: item.salary || '',
         description: item.description || item.jobDescription || '',
       };
